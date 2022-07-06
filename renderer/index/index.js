@@ -5,6 +5,10 @@ $id("add-music-button").addEventListener("click", () => {
   ipcRenderer.send("add-music-window");
 });
 
+let musicAudio = new Audio();
+let allTracks;
+let currentTrack;
+
 const renderListHTML = (tracks) => {
   const tracksList = $id("tracks-list");
   const tracksListHTML = tracks.reduce((html, track) => {
@@ -14,8 +18,8 @@ const renderListHTML = (tracks) => {
         <b>${track.fileName}</b>
       </div>
       <div class="col-2">
-        <i class="bi bi-file-play mr-2"></i>
-        <i class="bi bi-trash-fill"></i>
+        <i class="bi bi-play-fill mr-2" data-id="${track.id}"></i>
+        <i class="bi bi-trash-fill" data-id="${track.id}"></i>
       </div>
     </li>`);
   }, "");
@@ -26,5 +30,19 @@ const renderListHTML = (tracks) => {
 };
 
 ipcRenderer.on("getTracks", (event, tracks) => {
+  allTracks = tracks;
   renderListHTML(tracks);
+});
+
+$id("tracks-list").addEventListener("click", (e) => {
+  e.preventDefault();
+  const { dataset, classList } = e.target;
+  const id = dataset && dataset.id;
+  if (id && classList.contains("bi-play-fill")) {
+    // 这里播放音乐
+    currentTrack = allTracks.find((item) => item.id === id);
+    musicAudio.src = currentTrack.path;
+    musicAudio.play();
+    classList.replace("bi-play-fill", "bi-pause");
+  }
 });
