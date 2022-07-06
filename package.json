@@ -1,10 +1,28 @@
 {
-  "name": "electron-quick-start",
+  "name": "electron-music",
   "version": "1.0.0",
   "description": "A minimal Electron application",
   "main": "main.js",
   "scripts": {
-    "start": "chcp 65001 && nodemon --watch main.js --exec electron ."
+    "start": "chcp 65001 && nodemon --watch main.js --exec electron .",
+    "win": "electron-packager . HelloWorld --platform=win32 --arch=x64 --icon=icon.ico --out=./dist --asar --app-version=0.0.1",
+    "winexe": "electron-builder --win --x64"
+  },
+  "build": {
+    "appId": "com.electron-music.app",
+    "nsis": {
+      "oneClick": false,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "./icon.ico",
+      "uninstallerIcon": "./icon.ico",
+      "installerHeaderIcon": "./icon.ico",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    },
+    "win": {
+      "target": "nsis"
+    }
   },
   "repository": "https://github.com/electron/electron-quick-start",
   "keywords": [
@@ -17,7 +35,9 @@
   "author": "GitHub",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "^19.0.6"
+    "electron": "^19.0.6",
+    "electron-builder": "^23.1.0",
+    "electron-packager": "^15.5.1"
   },
   "dependencies": {
     "@popperjs/core": "^2.11.5",
