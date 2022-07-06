@@ -33,14 +33,16 @@ app.on("ready", () => {
       "./renderer/add/add.html"
     );
   });
-  ipcMain.on("open-music-file", () => {
+  ipcMain.on("open-music-file", (event) => {
     dialog
       .showOpenDialog({
         properties: ["openFile ", "multiSelections"],
         filters: [{ name: "Music", extensions: ["mp3"] }],
       })
-      .then((result) => {
-        console.log(result);
+      .then((files) => {
+        if (files.filePaths) {
+          event.sender.send("selected-file", files.filePaths);
+        }
       })
       .catch((err) => {
         console.log(err);
