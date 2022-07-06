@@ -35,7 +35,7 @@ app.on("ready", () => {
       {
         width: 500,
         height: 400,
-        parent: mainWindow,
+        // parent: mainWindow,
       },
       "./renderer/add/add.html"
     );
@@ -61,5 +61,10 @@ app.on("ready", () => {
       .catch((err) => {
         console.log(err);
       });
+  });
+
+  ipcMain.on("delete-track", (event, id) => {
+    const newTracks = myStore.deleteTrack(id).getTracks();
+    mainWindow.send("getTracks", newTracks);
   });
 });

@@ -40,9 +40,32 @@ $id("tracks-list").addEventListener("click", (e) => {
   const id = dataset && dataset.id;
   if (id && classList.contains("bi-play-fill")) {
     // 这里播放音乐
-    currentTrack = allTracks.find((item) => item.id === id);
-    musicAudio.src = currentTrack.path;
-    musicAudio.play();
-    classList.replace("bi-play-fill", "bi-pause");
+    if (currentTrack && currentTrack.id === id) {
+      // 继续播放音乐
+      musicAudio.play();
+    } else {
+      //播放新的音乐，还原之前的图标
+      currentTrack = allTracks.find((item) => item.id === id);
+      musicAudio.src = currentTrack.path;
+      musicAudio.play();
+      const resetIconEle = document.querySelector(".bi-pause-fill");
+      if (resetIconEle) {
+        resetIconEle.classList.replace("bi-pause-fill", "bi-play-fill");
+      }
+    }
+    classList.replace("bi-play-fill", "bi-pause-fill");
+  } else if (id && classList.contains("bi-pause-fill")) {
+    // 暂停音乐
+    musicAudio.pause();
+    classList.replace("bi-pause-fill", "bi-play-fill");
+  } else if (id && classList.contains("bi-trash-fill")) {
+    // 删除事件
+    const resetIconEle = document.querySelector(".bi-pause-fill");
+    if (resetIconEle) {
+      // 删除是如果在播放，就暂停然后删除
+      musicAudio.pause();
+      resetIconEle.classList.replace("bi-pause-fill", "bi-play-fill");
+    }
+    ipcRenderer.send("delete-track", id);
   }
 });
