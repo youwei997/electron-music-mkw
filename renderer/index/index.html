@@ -7,6 +7,7 @@
     <meta http-equiv="Content-Security-Policy"
         content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'">
     <link href="../../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../../node_modules/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <title>本地播放器</title>
 </head>
 
@@ -17,7 +18,7 @@
         <div class="d-grid gap-2 mt-4">
             <button id="add-music-button" class="btn btn-primary" type="button">添加歌曲到曲库</button>
         </div>
-
+        <div id="tracks-list" class="mb-4"></div>
     </div>
 </body>
 <script src="./index.js"></script>
