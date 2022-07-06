@@ -1,5 +1,5 @@
 const { ipcRenderer } = require("electron");
-const { $id } = require("../helper");
+const { $id, convertDurations } = require("../helper");
 const path = require("path");
 $id("add-music-button").addEventListener("click", () => {
   ipcRenderer.send("add-music-window");
@@ -17,7 +17,7 @@ musicAudio.addEventListener("loadedmetadata", (event) => {
 // 更新播放器状态
 musicAudio.addEventListener("timeupdate", (event) => {
   console.log(musicAudio.currentTime);
-  updateProgressHTML(musicAudio.currentTime);
+  updateProgressHTML(musicAudio.currentTime, musicAudio.duration);
 });
 
 // 渲染播放状态页面
@@ -25,14 +25,27 @@ const renderPlayerHTML = (name, duration) => {
   const player = $id("player-status");
   const html = `<div class="col font-weight-bold">${name}</div>
                   <div class="col">
-                  <span id="current-seeker">00:00</span> / ${duration}
-                </div>`;
+                  <span id="current-seeker">00:00</span> / ${convertDurations(
+                    duration
+                  )}
+                </div>
+                <div class="progress" id="progress">
+                    <div class="progress-bar bg-success" id="progress-bar" role="progressbar" style="width: 0%;">0%</div>
+                </div>
+                `;
   player.innerHTML = html;
 };
 
-const updateProgressHTML = (currentTime) => {
+const updateProgressHTML = (currentTime, duration) => {
+  // 计算progress
+  const progress = Math.floor((currentTime / duration) * 100);
+  const bar = $id("progress-bar");
+  const progressParent = $id("progress");
+  bar.innerHTML = progress + "%";
+  bar.style.width = progress + "%";
+  progressParent.style.padding = 0;
   const seeker = $id("current-seeker");
-  seeker.innerHTML = currentTime;
+  seeker.innerHTML = convertDurations(currentTime);
 };
 
 // 渲染页面
