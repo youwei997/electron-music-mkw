@@ -18,7 +18,7 @@ class DataStore extends Store {
   }
   // 添加音乐信息
   addTracks(tracks) {
-    const tracksWithProps = track
+    const tracksWithProps = tracks
       .map((track) => {
         return {
           id: uuidv4(),
@@ -28,8 +28,8 @@ class DataStore extends Store {
       })
       .filter((track) => {
         const currentTrackPath = this.getTracks().map((track) => track.path);
-        return currentTrackPath.indexOf(track.path) < 0;
-        // return !currentTrackPath.includes(track.path);
+        // return currentTrackPath.indexOf(track.path) < 0;
+        return !currentTrackPath.includes(track.path);
       });
     // 旧的和新的合并
     this.tracks = [...this.tracks, ...tracksWithProps];
